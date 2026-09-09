@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rutas — Guía turística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+
+<section id="screen-login" class="screen screen-auth is-active">
+  <div class="auth-hero">
+    <p class="auth-hero__mark">Rutas</p>
+    <h1 class="auth-hero__title">Tu próxima<br>parada te<br>está esperando.</h1>
+    <p class="auth-hero__sub">Descubre cafés, senderos, restaurantes y planes cerca de ti en Norte de Santander.</p>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab is-active" data-auth-tab="login">Iniciar sesión</button>
+      <button class="auth-tab" data-auth-tab="register">Crear cuenta</button>
+    </div>
+
+    <form id="form-login" class="auth-form is-active">
+      <label>Correo electrónico
+        <input type="email" name="email" required placeholder="tu@correo.com" />
+      </label>
+      <label>Contraseña
+        <input type="password" name="password" required placeholder="••••••••" />
+      </label>
+      <p class="auth-error" id="login-error"></p>
+      <button type="submit" class="btn btn-primary">Entrar</button>
+      <button type="button" class="btn btn-ghost" id="btn-demo-login">Entrar como invitado</button>
+    </form>
+
+    <form id="form-register" class="auth-form">
+      <label>Nombre
+        <input type="text" name="name" required placeholder="Tu nombre" />
+      </label>
+      <label>Correo electrónico
+        <input type="email" name="email" required placeholder="tu@correo.com" />
+      </label>
+      <label>Contraseña
+        <input type="password" name="password" required minlength="4" placeholder="Mínimo 4 caracteres" />
+      </label>
+      <p class="auth-error" id="register-error"></p>
+      <button type="submit" class="btn btn-primary">Crear cuenta</button>
+    </form>
+  </div>
+</section>
+
+
+<div id="app" class="app">
+
+  <header id="topbar" class="topbar">
+    <button id="btn-back" class="icon-btn" aria-label="Volver" hidden>←</button>
+    <h1 id="topbar-title">Inicio</h1>
+    <button id="btn-logout" class="icon-btn" aria-label="Cerrar sesión">⏻</button>
+  </header>
+
+  <main id="content" class="content"><!-- las vistas se inyectan aquí --></main>
+
+  <nav id="bottomnav" class="bottomnav">
+    <button class="navtab is-active" data-view="home">
+      <span class="navtab__icon">🏠</span><span>Inicio</span>
+    </button>
+    <button class="navtab" data-view="search">
+      <span class="navtab__icon">🔎</span><span>Buscar</span>
+    </button>
+    <button class="navtab navtab--plan" data-view="plan">
+      <span class="navtab__icon">🧭</span><span>Planificar</span>
+    </button>
+    <button class="navtab" data-view="favorites">
+      <span class="navtab__icon">❤️</span><span>Favoritos</span>
+    </button>
+    <button class="navtab" data-view="profile">
+      <span class="navtab__icon">👤</span><span>Perfil</span>
+    </button>
+  </nav>
+</div>
+
+<div id="toast" class="toast"></div>
+
+
+
+<template id="tpl-home">
+  <div class="view view-home">
+    <button id="btn-near-me" class="near-me-btn">📍 Cerca de mí</button>
+
+    <section class="section">
+      <h2 class="section__title">¿Qué quieres hacer hoy?</h2>
+      <div id="category-grid" class="category-grid"></div>
+    </section>
+
+    <section class="section" id="recommend-section">
+      <h2 class="section__title">✨ Recomendado para ti</h2>
+      <p class="section__hint">Encontramos estos lugares que podrían gustarte.</p>
+      <div id="recommend-list" class="place-list place-list--scroll"></div>
+    </section>
+  </div>
+</template>
+
+<template id="tpl-search">
+  <div class="view view-search">
+    <div class="searchbar">
+      <input id="search-input" type="search" placeholder="Buscar lugares, comida, planes…" />
+    </div>
+
+    <div class="chiprow" id="category-chips"></div>
+
+    <button id="btn-filters" class="filters-toggle">⚙️ Filtros</button>
+
+    <div id="filters-panel" class="filters-panel" hidden>
+      <div class="filter-group">
+        <p class="filter-group__label">Distancia</p>
+        <div class="chiprow" id="filter-distance"></div>
+      </div>
+      <div class="filter-group">
+        <p class="filter-group__label">Precio</p>
+        <div class="chiprow" id="filter-price"></div>
+      </div>
+      <div class="filter-group">
+        <p class="filter-group__label">Características</p>
+        <div class="chiprow" id="filter-tags"></div>
+      </div>
+      <button id="btn-clear-filters" class="btn btn-ghost btn-small">Limpiar filtros</button>
+    </div>
+
+    <p id="search-count" class="search-count"></p>
+    <div id="search-results" class="place-list"></div>
+  </div>
+</template>
+
+<template id="tpl-detail">
+  <div class="view view-detail"></div>
+</template>
+
+<template id="tpl-plan">
+  <div class="view view-plan">
+    <section class="section">
+      <h2 class="section__title">Planifica mi día</h2>
+      <p class="section__hint">Cuéntanos tu plan y armamos un itinerario. Ej: "Estoy en Chinácota, tengo $100.000 y quiero hacer algo con mis amigos."</p>
+      <textarea id="plan-input" rows="3" placeholder="Escribe tu plan aquí…"></textarea>
+      <button id="btn-generate-plan" class="btn btn-primary">Generar itinerario</button>
+    </section>
+    <section class="section" id="plan-result-section" hidden>
+      <div class="plan-summary" id="plan-summary"></div>
+      <div id="plan-timeline" class="timeline"></div>
+    </section>
+  </div>
+</template>
+
+<template id="tpl-favorites">
+  <div class="view view-favorites">
+    <h2 class="section__title">❤️ Mis favoritos</h2>
+    <div class="chiprow" id="favorites-chips"></div>
+    <div id="favorites-list" class="place-list"></div>
+  </div>
+</template>
+
+<template id="tpl-profile">
+  <div class="view view-profile"></div>
+</template>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
